@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kiki Cafe – Cozy Cafe Menu & Ordering</title>
+<meta name="description" content="Digital menu, WhatsApp ordering, and table service for Kiki Cafe in Ambernath.">
+<meta name="theme-color" content="#f7f3ec">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f3ec;--card:#fffdf9;--ink:#26231f;--mute:#81786e;
+  --acc:#5a5148;--line:#e4ddd3;--hero:#ebe3d7;--on:#fffdf9;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0 auto;max-width:500px;
+  background:radial-gradient(circle at 50% -10%,#fffdf8 0,#f7f3ec 38%,#f3eee6 100%);
+  color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  padding-bottom:30px;min-height:100vh;
+}
+header{position:relative;padding:32px 18px 20px;text-align:left;overflow:hidden}
+header:before{content:'KIKI';position:absolute;right:-6px;top:-15px;font:700 95px/1 'Playfair Display',Georgia,serif;letter-spacing:-6px;color:rgba(70,62,53,.045);pointer-events:none}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:relative;z-index:3}
+.lang{display:flex;gap:3px;background:rgba(255,253,249,.82);border:1px solid #d8cec1;border-radius:15px;padding:3px;box-shadow:0 3px 10px rgba(62,49,37,.06);backdrop-filter:blur(8px)}
+.lang button{border:0;background:transparent;border-radius:12px;padding:5px 9px;font:600 11px system-ui,sans-serif;color:#655c54;cursor:pointer;transition:.15s}
+.lang button.on{background:#292621;color:#fffdf9}
+.top-actions{display:flex;align-items:center;gap:6px}
+.hist-btn{border:1px solid #d8cec1;border-radius:18px;background:rgba(255,253,249,.85);color:#292621;padding:6px 11px;font:600 11px system-ui;display:flex;align-items:center;gap:5px;cursor:pointer;box-shadow:0 3px 10px rgba(40,34,28,.06)}
+.hist-badge{background:#292621;color:#fff;border-radius:99px;padding:1px 6px;font-size:10px;font-weight:700}
+.theme-toggle{width:36px;height:36px;border:1px solid #d8cec1;border-radius:50%;background:rgba(255,253,249,.85);color:#292621;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(40,34,28,.06)}
+.sub-tag{font:600 9px system-ui;letter-spacing:1.8px;color:#8a7f72;text-transform:uppercase;margin-bottom:3px}
+h1{margin:0;font:500 38px/1 'Playfair Display',Georgia,serif;letter-spacing:-1.2px;color:#24211d}
+.sub{margin-top:6px;color:#81786e;font-size:12px}
+.banner{margin:12px 18px 0;padding:10px 14px;border-radius:14px;background:#292621;color:#f8f2e9;font:600 12px system-ui;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 6px 16px rgba(41,36,31,.12)}
+.feature-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 18px 4px}
+.feature-btn{padding:9px 4px;border:1px solid #ddd5ca;border-radius:14px;background:#fffdf9;color:#554b41;font:600 11px system-ui;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,.03)}
+.feature-btn.on{background:#292621;color:#fffdf9;border-color:#292621}
+.tools{padding:8px 18px 4px}
+#q{width:100%;height:44px;padding:0 16px;border:1px solid #ded6cb;border-radius:14px;background:rgba(255,253,249,.92);color:#26231f;font:500 13px system-ui;outline:none;box-shadow:0 4px 14px rgba(54,46,38,.04)}
+#q:focus{border-color:#8c7661}
+.filter-row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:9px;overflow-x:auto;scrollbar-width:none}
+.chips{display:flex;gap:6px;shrink:0}
+.chips button{padding:6px 12px;border:1px solid #ddd5ca;background:#fffdf9;color:#655c53;border-radius:99px;font:600 11px system-ui;cursor:pointer;white-space:nowrap}
+.chips button.on{background:#292621;color:#fffdf9;border-color:#292621}
+.svc{display:flex;gap:6px;shrink:0}
+.svc button{padding:6px 10px;border:1px solid #ddd2c5;background:#f0e8dc;color:#4e4439;border-radius:12px;font:600 11px system-ui;cursor:pointer;white-space:nowrap}
+nav{display:flex;gap:7px;padding:12px 18px;position:sticky;top:0;background:rgba(247,243,236,.92);backdrop-filter:blur(12px);z-index:10;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(222,214,203,.6)}
+nav button{flex:none;padding:7px 15px;border:1px solid #ddd5ca;background:#fffdf9;color:#6d6256;border-radius:99px;font:600 12px system-ui;cursor:pointer;transition:.15s}
+nav button.on{background:#292621;color:#fffdf9;border-color:#292621;box-shadow:0 4px 12px rgba(38,34,29,.15)}
+main{padding:10px 18px 24px}
+.item{position:relative;display:flex;gap:12px;align-items:center;background:rgba(255,253,249,.95);border:1px solid #e5ded5;border-radius:18px;margin-bottom:11px;padding:10px;cursor:pointer;box-shadow:0 4px 14px rgba(62,51,41,.04);transition:transform .12s}
+.item:active{transform:scale(.985)}
+.item.out{opacity:.5}
+.th{width:76px;height:76px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:35px;position:relative;flex:none;background:linear-gradient(135deg,#eee7dd,#ddd2c3);border:1px solid #ddd1c2}
+.th .fav{position:absolute;right:4px;top:4px;width:26px;height:26px;border:0;border-radius:50%;background:rgba(255,253,249,.92);font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.th .fav.on{color:#e11d48}
+.item-info{flex:1;min-width:0}
+.nm{font:600 16px/1.2 'Playfair Display',Georgia,serif;letter-spacing:-.2px;display:flex;align-items:center;gap:5px}
+.best-tag{font:700 9px system-ui;background:#fef3c7;color:#92400e;border-radius:99px;padding:1px 6px}
+.ds{margin-top:4px;font:600 10px system-ui;color:#857769;text-transform:uppercase;letter-spacing:.4px}
+.rating-stars{font-size:10px;color:#d97706;font-weight:700;margin-top:2px}
+.pr{font:700 15px system-ui;color:#292621;margin-left:auto;white-space:nowrap;padding-right:6px}
+.plus{width:32px;height:32px;border-radius:50%;border:0;background:#292621;color:#fff;font:700 18px/1 system-ui;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.cbar{position:fixed;left:16px;right:16px;max-width:468px;margin:0 auto;bottom:14px;z-index:40;display:none;justify-content:space-between;align-items:center;background:#292621;color:#fffdf9;border-radius:18px;padding:14px 18px;font:700 14px system-ui;box-shadow:0 12px 28px rgba(35,31,27,.35);cursor:pointer}
+.cbar.show{display:flex}
+body.hascart{padding-bottom:90px}
+.sheet{position:fixed;inset:0;background:rgba(25,20,16,.55);display:none;align-items:flex-end;justify-content:center;z-index:50;backdrop-filter:blur(3px)}
+.sheet.show{display:flex}
+.panel{background:#f8f4ee;width:100%;max-width:500px;border-radius:26px 26px 0 0;padding:16px 18px calc(22px + env(safe-area-inset-bottom,0px));max-height:90%;overflow-y:auto;box-shadow:0 -10px 35px rgba(0,0,0,.25)}
+.grab{width:42px;height:5px;border-radius:3px;background:#c8beb2;margin:0 auto 12px}
+.x{float:right;border:0;background:#fffdf9;color:#292621;border-radius:50%;width:32px;height:32px;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.15);cursor:pointer}
+.vid{height:200px;border-radius:18px;background:linear-gradient(135deg,#eed8c7,#dfccbc);display:flex;align-items:center;justify-content:center;font-size:75px;margin-bottom:12px;border:1px solid #d9ccbd}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+.row h2{margin:0;font:700 24px 'Playfair Display',Georgia,serif}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;font-size:11px}
+.tags span{background:#e8ddd0;color:#554b42;border-radius:99px;padding:3px 9px;font-weight:600}
+.cr{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #e4ddd3;font-size:13px}
+.cr b{flex:1}
+.cr button{width:28px;height:28px;border-radius:8px;border:1px solid #d6caba;background:#fff;font:700 14px system-ui;cursor:pointer}
+.tot{display:flex;justify-content:space-between;font:700 17px system-ui;margin:12px 0 4px}
+.wa{width:100%;margin-top:10px;padding:13px;border:0;border-radius:14px;background:linear-gradient(180deg,#25D366,#1eb855);color:#fff;font:700 14px system-ui;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 16px rgba(37,211,102,.25)}
+.clr{width:100%;margin-top:8px;padding:11px;border:1px solid #ded6cb;border-radius:12px;background:#fffdf9;color:#7d7162;font:600 12px system-ui;cursor:pointer}
+.info{margin:10px 18px 24px;padding:16px;background:#fffdf9;border:1px solid #e2d8cb;border-radius:20px;font-size:13px;box-shadow:0 3px 12px rgba(0,0,0,.03)}
+.info h3{margin:0 0 10px;font:600 18px 'Playfair Display',serif}
+.ib{display:flex;gap:6px;flex-wrap:wrap}
+.ib a{padding:8px 12px;border-radius:12px;background:#eee5d8;color:#4a4136;text-decoration:none;font-weight:600;font-size:11px}
+.h-item{background:#fff;border:1px solid #e4ddd3;border-radius:16px;padding:12px;margin-bottom:10px}
+.h-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0e9df;padding-bottom:6px;margin-bottom:8px}
+.h-reorder{width:100%;margin-top:8px;padding:9px;background:#292621;color:#fff;border:0;border-radius:10px;font:700 12px system-ui;cursor:pointer}
+.toast{display:none;position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#292621;color:#fff;padding:9px 16px;border-radius:20px;font:600 12px system-ui;z-index:99;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+
+/* Dark mode */
+.dark-mode{--bg:#171411;--card:#211d19;--ink:#eee7dc;--mute:#a89d90;--acc:#c5ad91;--line:#3a322b;--hero:#302820;--on:#1b1714}
+.dark-mode body{background:radial-gradient(circle at 50% -10%,#29221c 0,#171411 42%,#120f0d 100%);color:var(--ink)}
+.dark-mode h1{color:#f5ede1}
+.dark-mode .item,.dark-mode .info,.dark-mode .h-item{background:#211d19;border-color:#382f27}
+.dark-mode #q{background:#231e1a;border-color:#3d332a;color:#eee7dc}
+.dark-mode nav{background:rgba(23,20,17,.92);border-color:#332a22}
+.dark-mode nav button{background:#211d19;color:#b8aba0;border-color:#382f27}
+.dark-mode nav button.on{background:#e4d5c2;color:#25201b}
+.dark-mode .panel{background:#1b1713}
+.dark-mode .x{background:#28221c;color:#fff}
+.dark-mode .th{background:linear-gradient(135deg,#332b24,#26201b);border-color:#3d332a}
+.dark-mode .cbar{background:#e4d5c2;color:#25201b}
+.dark-mode .feature-btn,.dark-mode .chips button{background:#211d19;border-color:#382f27;color:#b8aba0}
+.dark-mode .feature-btn.on,.dark-mode .chips button.on{background:#e4d5c2;color:#25201b}
+.dark-mode .banner{background:#342b23}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<header>
+  <div class="top-bar">
+    <div class="lang">
+      <button id="l-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="l-mr" onclick="setLang('mr')">मराठी</button>
+      <button id="l-hi" onclick="setLang('hi')">हिंदी</button>
+    </div>
+    <div class="top-actions">
+      <button class="hist-btn" onclick="openHistory()">
+        📜 <span id="tx-hist-btn">History</span>
+        <span id="histCount" class="hist-badge" style="display:none">0</span>
+      </button>
+      <button class="theme-toggle" onclick="toggleDark()" id="thIcon">☾</button>
+    </div>
+  </div>
+  <div class="sub-tag">Ambernath · Cozy Dining & Cafe</div>
+  <h1 id="cname">Kiki Cafe</h1>
+  <div class="sub" id="ctag">Ambernath · Tap any dish to see how it looks</div>
+</header>
+
+<div class="banner" onclick="openCoupons()">
+  <span id="bannerText">🔥 Sample offer: 10% off with code FIRST10!</span>
+  <span style="font-size:11px;font-weight:700;text-decoration:underline">FIRST10</span>
+</div>
+
+<div class="feature-strip">
+  <button id="btnFav" class="feature-btn" onclick="toggleFavFilter()">
+    <span>❤️</span><span id="tx-favs">Favorites</span>
+  </button>
+  <button id="btnBest" class="feature-btn" onclick="toggleBestFilter()">
+    <span>🔥</span><span id="tx-best">Best</span>
+  </button>
+  <button class="feature-btn" onclick="openCoupons()">
+    <span>🎁</span><span id="tx-offers">Offers</span>
+  </button>
+  <button class="feature-btn" onclick="openStatus()">
+    <span>⏱️</span><span id="tx-status">Status</span>
+  </button>
+</div>
+
+<div class="tools">
+  <input id="q" type="search" placeholder="🔍 Search dishes, ingredients...">
+  <div class="filter-row">
+    <div class="chips">
+      <button id="f-veg" onclick="toggleChip('veg')">🟢 Veg</button>
+      <button id="f-spicy" onclick="toggleChip('spicy')">🌶 Spicy</button>
+      <button id="f-u250" onclick="toggleChip('u250')">₹ Under 250</button>
+    </div>
+    <div class="svc">
+      <button onclick="serviceCall('call')">🔔 Waiter</button>
+      <button onclick="serviceCall('bill')">🧾 Bill</button>
+    </div>
+  </div>
+</div>
+
+<nav id="nav"></nav>
+<main id="list"></main>
+
+<div class="info" id="infoSec">
+  <h3>Visit us & Connect</h3>
+  <div class="ib">
+    <a href="tel:+918830405895">📞 Call</a>
+    <a href="https://wa.me/918830405895" target="_blank">💬 WhatsApp</a>
+    <a href="https://instagram.com/kikicafeambernath" target="_blank">📷 Instagram</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Kiki+Cafe+Ambernath" target="_blank">📍 Directions</a>
+  </div>
+  <p style="margin:10px 0 0;font-size:12px;color:#7d7162">🕒 Hours: 11:00 AM - 11:00 PM · 📶 WiFi: KikiCafe_Guest</p>
+  <button class="clr" style="margin-top:10px" onclick="openFeedback()">⭐ Enjoyed your visit? Rate us</button>
+</div>
+
+<div id="cbar" class="cbar" onclick="openCart()">
+  <span id="cbar-text">🧾 My order · 0 items</span>
+  <span id="cbar-price">₹0 · View ›</span>
+</div>
+
+<div id="sheet" class="sheet" onclick="if(event.target===this)closeSheet()">
+  <div id="panel" class="panel"></div>
+</div>
+
+<script>
+var CAFE = {
+  name: "Kiki Cafe",
+  tagline: "Ambernath · Tap any dish to see how it looks",
+  whatsapp: "918830405895",
+  upi: "8830405895@yespop",
+  reviewUrl: "https://www.google.com/maps/search/?api=1&query=Kiki+Cafe+Ambernath"
+};
+
+var ITEMS = [
+  {"category":"Pizza","item":"Margherita","price":339,"veg":"yes","spice":"Not spicy","tag":"Classic","description":"Thin crust with tomato sauce, mozzarella and basil.","tastes_like":"Simple, cheesy, safe for everyone.","ingredients":"Mozzarella, tomato, basil","emoji":"🍕","available":true},
+  {"category":"Pizza","item":"Pizza Ortolana","price":369,"veg":"yes","spice":"Mild","tag":"Veggie","description":"Vegetable pizza topped with seasonal veggies and cheese.","tastes_like":"Fresh and veggie-heavy.","ingredients":"Veggies, mozzarella, tomato","emoji":"🫑","available":true},
+  {"category":"Pizza","item":"Chef Special (Paneer)","price":409,"veg":"yes","spice":"Medium","tag":"Chef's pick","description":"Pizza loaded with paneer, peppers, onion and extra cheese.","tastes_like":"Rich and filling, good to share.","ingredients":"Paneer, peppers, onion, cheese","emoji":"🧈","available":true,"best":true},
+  {"category":"Pizza","item":"Genovese Pesto","price":369,"veg":"yes","spice":"Mild","tag":"Herby","description":"Pizza with a basil pesto base instead of tomato sauce.","tastes_like":"Green, herby and nutty.","ingredients":"Basil pesto, mozzarella","emoji":"🌿","available":true},
+  {"category":"Pizza","item":"Cargado Mexican","price":369,"veg":"yes","spice":"Medium","tag":"Spicy","description":"Mexican-style pizza with jalapenos, beans and spiced toppings.","tastes_like":"Bold and spicy.","ingredients":"Jalapeno, beans, cheese, spices","emoji":"🌶","available":true},
+  {"category":"Pasta","item":"Arrabiata","price":289,"veg":"yes","spice":"Spicy","tag":"Spicy","description":"Penne in a fiery tomato sauce with garlic and chilli flakes.","tastes_like":"Tangy and hot, no cream.","ingredients":"Penne, tomato, garlic, chilli","emoji":"🍝","available":true},
+  {"category":"Pasta","item":"Pesto","price":309,"veg":"yes","spice":"Mild","tag":"Chef's pick","description":"Pasta tossed in a green sauce of basil, pine nuts, parmesan and olive oil.","tastes_like":"Herby and nutty, not creamy.","ingredients":"Basil, pine nuts, parmesan, olive oil","emoji":"🌿","available":true,"best":true},
+  {"category":"Pasta","item":"Alfredo","price":289,"veg":"yes","spice":"Not spicy","tag":"Creamy","description":"Rich white sauce of cream, butter and cheese on penne.","tastes_like":"Smooth, cheesy, filling.","ingredients":"Cream, butter, cheese","emoji":"🧀","available":true,"best":true},
+  {"category":"Pasta","item":"Mac n Cheese","price":359,"veg":"yes","spice":"Not spicy","tag":"Comfort food","description":"Baked macaroni in a thick, gooey cheese sauce.","tastes_like":"Cheesy and comforting.","ingredients":"Macaroni, cheese, cream","emoji":"🧀","available":true},
+  {"category":"Pasta","item":"Aglio e Olio","price":309,"veg":"yes","spice":"Medium","tag":"Light","description":"Italian classic: pasta in olive oil with garlic and chilli. No cream.","tastes_like":"Light and garlicky.","ingredients":"Olive oil, garlic, chilli","emoji":"🧄","available":true},
+  {"category":"Pasta","item":"Pink Sauce Pasta","price":309,"veg":"yes","spice":"Mild","tag":"Fan favourite","description":"Half tomato, half cream: tangy and creamy together.","tastes_like":"Best of red and white.","ingredients":"Tomato, cream, cheese","emoji":"🍅","available":true,"best":true},
+  {"category":"Salads","item":"Greek Salad","price":229,"veg":"yes","spice":"Not spicy","tag":"Fresh","description":"Cucumber, tomato, olives and feta with a light dressing.","tastes_like":"Fresh, salty and crunchy.","ingredients":"Cucumber, tomato, olives, feta","emoji":"🥗","available":true},
+  {"category":"Salads","item":"Waldorf Salad","price":269,"veg":"yes","spice":"Not spicy","tag":"Sweet and crunchy","description":"Apple, grapes and walnuts in a creamy dressing.","tastes_like":"Sweet, crunchy, creamy.","ingredients":"Apple, grapes, walnuts, dressing","emoji":"🍎","available":true},
+  {"category":"Salads","item":"Caesar Salad","price":229,"veg":"yes","spice":"Not spicy","tag":"Classic","description":"Crisp lettuce with parmesan, croutons and Caesar dressing.","tastes_like":"Creamy and tangy.","ingredients":"Lettuce, parmesan, croutons","emoji":"🥬","available":true},
+  {"category":"Iced Tea","item":"Peach Iced Tea","price":189,"veg":"yes","spice":"Cold","tag":"Cold","description":"Chilled black tea with sweet peach.","tastes_like":"Light and sweet.","ingredients":"Tea, peach","emoji":"🍑","available":true,"best":true},
+  {"category":"Iced Tea","item":"Lemon Iced Tea","price":199,"veg":"yes","spice":"Cold","tag":"Cold","description":"Chilled black tea with fresh lemon.","tastes_like":"Crisp and tangy.","ingredients":"Tea, lemon","emoji":"🍋","available":true},
+  {"category":"Iced Tea","item":"Passion Fruit Iced Tea","price":209,"veg":"yes","spice":"Cold","tag":"Cold","description":"Chilled tea with tangy passion fruit.","tastes_like":"Tropical and tart.","ingredients":"Tea, passion fruit","emoji":"🍹","available":true},
+  {"category":"Mocktails","item":"Sex on the Beach","price":249,"veg":"yes","spice":"Cold","tag":"Fruity","description":"Fruity mocktail with peach, orange and cranberry notes.","tastes_like":"Sweet and fruity.","ingredients":"Peach, orange, cranberry","emoji":"🍹","available":true},
+  {"category":"Mocktails","item":"Bitch Pe Beach","price":249,"veg":"yes","spice":"Cold","tag":"Fruity","description":"Fruity house mocktail, served cold over ice.","tastes_like":"Sweet and refreshing.","ingredients":"Fruit juices, soda","emoji":"🍹","available":true},
+  {"category":"Mocktails","item":"Pina Colada","price":249,"veg":"yes","spice":"Cold","tag":"Tropical","description":"Creamy pineapple and coconut mocktail.","tastes_like":"Sweet, creamy, tropical.","ingredients":"Pineapple, coconut","emoji":"🍍","available":true},
+  {"category":"Mocktails","item":"Happy Hell","price":249,"veg":"yes","spice":"Cold","tag":"House special","description":"House special mocktail, bright and tangy.","tastes_like":"Tangy with a kick.","ingredients":"Fruit, spices, soda","emoji":"🔥","available":true,"best":true},
+  {"category":"Mocktails","item":"Berry Blend Mocktail","price":219,"veg":"yes","spice":"Cold","tag":"Fruity","description":"Mixed berries blended with soda.","tastes_like":"Sweet and tangy.","ingredients":"Mixed berries, soda","emoji":"🫐","available":true},
+  {"category":"Mocktails","item":"Mystery Mocktail","price":219,"veg":"yes","spice":"Cold","tag":"Surprise","description":"Berry and orange mocktail served with an orange wheel.","tastes_like":"Berry soda with a citrus kick.","ingredients":"Berries, orange, soda","emoji":"🍹","available":true},
+  {"category":"Mojitos","item":"Virgin Mojito","price":229,"veg":"yes","spice":"Cold","tag":"Refreshing","description":"Lime, mint and soda over crushed ice.","tastes_like":"Sharp and fizzy.","ingredients":"Lime, mint, soda","emoji":"🍃","available":true,"best":true},
+  {"category":"Mojitos","item":"Watermelon Mojito","price":239,"veg":"yes","spice":"Cold","tag":"Refreshing","description":"Mojito with fresh watermelon.","tastes_like":"Sweet, minty and cooling.","ingredients":"Watermelon, mint, lime","emoji":"🍉","available":true},
+  {"category":"Mojitos","item":"Peach Mojito","price":249,"veg":"yes","spice":"Cold","tag":"Refreshing","description":"Mojito with sweet peach.","tastes_like":"Fruity and minty.","ingredients":"Peach, mint, lime","emoji":"🍑","available":true},
+  {"category":"Mojitos","item":"Wild Mojito","price":259,"veg":"yes","spice":"Cold","tag":"Refreshing","description":"Mojito with mixed wild berries.","tastes_like":"Berry-sweet with mint.","ingredients":"Wild berries, mint, lime","emoji":"🫐","available":true},
+  {"category":"Mojitos","item":"Bloody Mojito","price":209,"veg":"yes","spice":"Cold","tag":"Refreshing","description":"Red mojito with a fruity twist.","tastes_like":"Sweet-tart and minty.","ingredients":"Red fruit, mint, lime","emoji":"🍓","available":true},
+  {"category":"Mojitos","item":"Blue Mojito","price":279,"veg":"yes","spice":"Cold","tag":"Refreshing","description":"Blue curacao-flavoured mojito with mint and lime.","tastes_like":"Citrusy and sweet.","ingredients":"Blue curacao syrup, mint, lime","emoji":"🧊","available":true},
+  {"category":"Frappes","item":"Strawberry Frappe","price":239,"veg":"yes","spice":"Cold","tag":"Cold and thick","description":"Blended strawberry frappe.","tastes_like":"Sweet and creamy.","ingredients":"Strawberry, milk, ice","emoji":"🍓","available":true},
+  {"category":"Frappes","item":"Nutella Frappe","price":249,"veg":"yes","spice":"Cold","tag":"Dessert drink","description":"Thick blended frappe with Nutella.","tastes_like":"Very sweet, chocolatey.","ingredients":"Nutella, milk, ice cream","emoji":"🍫","available":true,"best":true},
+  {"category":"Frappes","item":"Lotus Biscoff Frappe","price":229,"veg":"yes","spice":"Cold","tag":"Dessert drink","description":"Blended frappe with Biscoff cookies.","tastes_like":"Caramel-biscuit sweet.","ingredients":"Biscoff, milk, ice cream","emoji":"🍪","available":true,"best":true},
+  {"category":"Frappes","item":"Chococo Frappe","price":239,"veg":"yes","spice":"Cold","tag":"Dessert drink","description":"Rich chocolate frappe.","tastes_like":"Chocolatey and thick.","ingredients":"Chocolate, milk, ice cream","emoji":"🍫","available":true},
+  {"category":"Frappes","item":"Vietnamese Iced Coffee","price":259,"veg":"yes","spice":"Cold","tag":"Coffee","description":"Strong coffee with sweet condensed milk over ice.","tastes_like":"Strong, sweet and bold.","ingredients":"Coffee, condensed milk, ice","emoji":"☕","available":true,"best":true},
+  {"category":"Chai & Cocoa","item":"Elaichi Chai","price":99,"veg":"yes","spice":"Hot","tag":"Hot","description":"Milk tea flavoured with cardamom.","tastes_like":"Warm and fragrant.","ingredients":"Tea, milk, cardamom","emoji":"🍵","available":true},
+  {"category":"Chai & Cocoa","item":"Masala Chai","price":99,"veg":"yes","spice":"Hot","tag":"Hot","description":"Milk tea with warming Indian spices.","tastes_like":"Warm and spicy.","ingredients":"Tea, milk, spices","emoji":"🍵","available":true,"best":true},
+  {"category":"Chai & Cocoa","item":"Lemongrass Chai","price":99,"veg":"yes","spice":"Hot","tag":"Hot","description":"Milk tea with fresh lemongrass.","tastes_like":"Light and citrusy.","ingredients":"Tea, milk, lemongrass","emoji":"🍵","available":true},
+  {"category":"Chai & Cocoa","item":"Hot Chocolate","price":249,"veg":"yes","spice":"Hot","tag":"Hot","description":"Thick, rich hot chocolate.","tastes_like":"Chocolatey and warming.","ingredients":"Chocolate, milk","emoji":"🍫","available":true,"best":true},
+  {"category":"Chai & Cocoa","item":"Nutella Hot Chocolate","price":309,"veg":"yes","spice":"Hot","tag":"Hot","description":"Hot chocolate made with Nutella.","tastes_like":"Very rich and sweet.","ingredients":"Nutella, chocolate, milk","emoji":"🍫","available":true}
+];
+
+var LANG = localStorage.getItem("kiki_lang") || "en";
+var T = {
+  en:{search:"🔍 Search dishes, ingredients...",myorder:"My order",item:"item",items:"items",view:"View",add:"Add to my order",added:"Added ✓",total:"Total",waiter:"Show to waiter or send on WhatsApp",sendwa:"Send order on WhatsApp",pay:"Pay with UPI",clear:"Clear order",history:"Order History",reorder:"Re-order Meal",reordered:"Order reloaded into tray! ✓",nohist:"No past orders yet",nohistdesc:"Your placed orders will show here for 1-tap reordering."},
+  mr:{search:"🔍 पदार्थ किंवा साहित्य शोधा...",myorder:"माझी ऑर्डर",item:"पदार्थ",items:"पदार्थ",view:"पहा",add:"ऑर्डरमध्ये जोडा",added:"जोडले ✓",total:"एकूण",waiter:"वेटरला दाखवा किंवा WhatsApp वर पाठवा",sendwa:"WhatsApp वर ऑर्डर पाठवा",pay:"UPI ने पैसे द्या",clear:"ऑर्डर रिकामी करा",history:"ऑर्डर इतिहास",reorder:"पुन्हा ऑर्डर करा",reordered:"पदार्थ ट्रेमध्ये लोड झाले! ✓",nohist:"कोणतीही मागील ऑर्डर नाही",nohistdesc:"येथून तुम्ही आधीचे जेवण पुन्हा 1 टॅपमध्ये मागवू शकता."},
+  hi:{search:"🔍 व्यंजन या सामग्री खोजें...",myorder:"मेरा ऑर्डर",item:"आइटम",items:"आइटम",view:"देखें",add:"ऑर्डर में जोड़ें",added:"जोड़ा ✓",total:"कुल",waiter:"वेटर को दिखाएँ या WhatsApp पर भेजें",sendwa:"WhatsApp पर ऑर्डर भेजें",pay:"UPI से भुगतान करें",clear:"ऑर्डर साफ़ करें",history:"ऑर्डर इतिहास",reorder:"फिर से ऑर्डर करें",reordered:"आइटम ट्रे में लोड हुए! ✓",nohist:"कोई पिछला ऑर्डर नहीं",nohistdesc:"यहाँ से आप पिछला भोजन 1 टैप में दोबारा मंगा सकते हैं."}
+};
+
+var CART = {}, FAVS = {}, RATINGS = {}, ORDER_HIST = [], CUR_CAT = "Pizza", F = {veg:0,spicy:0,u250:0,favs:0,best:0}, TBL = "", CNAME = "", CNOTE = "", COUPON = {code:"",discount:0}, ORDER_TYPE = "dine_in", DELIVERY_ADDR = "", CONTACT_PHONE = "";
+
+try{
+  CART = JSON.parse(localStorage.getItem("kiki_cart") || "{}");
+  FAVS = JSON.parse(localStorage.getItem("kiki_favs") || "{}");
+  RATINGS = JSON.parse(localStorage.getItem("kiki_ratings") || "{}");
+  ORDER_HIST = JSON.parse(localStorage.getItem("kiki_history") || "[]");
+  TBL = new URLSearchParams(location.search).get("table") || "";
+  CNAME = localStorage.getItem("kiki_name") || "";
+  DELIVERY_ADDR = localStorage.getItem("kiki_addr") || "";
+  CONTACT_PHONE = localStorage.getItem("kiki_phone") || "";
+}catch(e){}
+
+function save(){
+  try{
+    localStorage.setItem("kiki_cart", JSON.stringify(CART));
+    localStorage.setItem("kiki_favs", JSON.stringify(FAVS));
+    localStorage.setItem("kiki_ratings", JSON.stringify(RATINGS));
+    localStorage.setItem("kiki_history", JSON.stringify(ORDER_HIST));
+    localStorage.setItem("kiki_name", CNAME);
+    localStorage.setItem("kiki_addr", DELIVERY_ADDR);
+    localStorage.setItem("kiki_phone", CONTACT_PHONE);
+  }catch(e){}
+}
+
+function toast(m){
+  var el = document.getElementById("toast");
+  el.textContent = m;
+  el.style.display = "block";
+  setTimeout(function(){ el.style.display = "none"; }, 1800);
+}
+
+function setLang(l){
+  LANG = l;
+  try{ localStorage.setItem("kiki_lang", l); }catch(e){}
+  document.querySelectorAll(".lang button").forEach(function(b){ b.classList.remove("on"); });
+  var activeBtn = document.getElementById("l-" + l);
+  if(activeBtn) activeBtn.classList.add("on");
+  document.getElementById("q").placeholder = T[LANG].search;
+  renderNav();
+  renderList();
+  renderBar();
+}
+
+function toggleDark(){
+  var isDark = document.documentElement.classList.toggle("dark-mode");
+  document.getElementById("thIcon").textContent = isDark ? "☀" : "☾";
+  try{ localStorage.setItem("kiki_dark", isDark ? "1" : "0"); }catch(e){}
+}
+
+if(localStorage.getItem("kiki_dark") === "1"){
+  document.documentElement.classList.add("dark-mode");
+  var ic = document.getElementById("thIcon");
+  if(ic) ic.textContent = "☀";
+}
+
+function renderNav(){
+  var cats = [];
+  ITEMS.forEach(function(it){ if(cats.indexOf(it.category) < 0) cats.push(it.category); });
+  var n = document.getElementById("nav");
+  n.innerHTML = "";
+  cats.forEach(function(c){
+    var b = document.createElement("button");
+    b.textContent = c;
+    if(c === CUR_CAT) b.className = "on";
+    b.onclick = function(){
+      CUR_CAT = c;
+      document.getElementById("q").value = "";
+      renderNav();
+      renderList();
+    };
+    n.appendChild(b);
+  });
+}
+
+function toggleChip(k){
+  F[k] = F[k] ? 0 : 1;
+  document.getElementById("f-" + k).classList.toggle("on", !!F[k]);
+  renderList();
+}
+
+function toggleFavFilter(){
+  F.favs = F.favs ? 0 : 1;
+  F.best = 0;
+  document.getElementById("btnFav").classList.toggle("on", !!F.favs);
+  document.getElementById("btnBest").classList.remove("on");
+  renderList();
+}
+
+function toggleBestFilter(){
+  F.best = F.best ? 0 : 1;
+  F.favs = 0;
+  document.getElementById("btnBest").classList.toggle("on", !!F.best);
+  document.getElementById("btnFav").classList.remove("on");
+  renderList();
+}
+
+function renderList(){
+  var q = (document.getElementById("q").value || "").trim().toLowerCase();
+  var l = document.getElementById("list");
+  l.innerHTML = "";
+  var count = 0;
+
+  ITEMS.forEach(function(it, idx){
+    if(q){
+      var hay = (it.item + " " + it.description + " " + it.ingredients + " " + it.category + " " + it.tag).toLowerCase();
+      if(hay.indexOf(q) < 0) return;
+    } else {
+      if(it.category !== CUR_CAT) return;
+    }
+    if(F.veg && !/^y/i.test(it.veg)) return;
+    if(F.spicy && !/spicy|medium/i.test(it.spice)) return;
+    if(F.u250 && it.price > 250) return;
+    if(F.favs && !FAVS[it.item]) return;
+    if(F.best && !it.best) return;
+
+    count++;
+    var card = document.createElement("div");
+    card.className = "item";
+    var isFav = !!FAVS[it.item];
+    var userRating = RATINGS[it.item];
+
+    card.innerHTML = 
+      '<div class="th">' + it.emoji + 
+        '<button class="fav ' + (isFav ? 'on' : '') + '" onclick="toggleFav(event,' + idx + ')">' + (isFav ? '♥' : '♡') + '</button>' +
+      '</div>' +
+      '<div class="item-info">' +
+        '<div class="nm">' + it.item + (it.best ? '<span class="best-tag">🔥 Best</span>' : '') + '</div>' +
+        '<div class="ds">' + it.tag + ' · ' + it.spice + '</div>' +
+        (userRating ? '<div class="rating-stars">★ ' + userRating + '.0</div>' : '') +
+      '</div>' +
+      '<div class="pr">₹' + it.price + '</div>' +
+      '<button class="plus" onclick="addToCart(event,' + idx + ')">+</button>';
+
+    card.onclick = function(){ showDetail(it); };
+    l.appendChild(card);
+  });
+
+  if(!count){
+    l.innerHTML = '<div style="text-align:center;padding:40px 0;color:#857769">🍽️ No dishes match your filter.</div>';
+  }
+}
+
+function toggleFav(e, idx){
+  e.stopPropagation();
+  var it = ITEMS[idx];
+  if(FAVS[it.item]) delete FAVS[it.item];
+  else FAVS[it.item] = 1;
+  save();
+  renderList();
+  toast(FAVS[it.item] ? "❤️ Added to favorites" : "♡ Removed from favorites");
+}
+
+function addToCart(e, idx){
+  if(e) e.stopPropagation();
+  var it = ITEMS[idx];
+  CART[it.item] = (CART[it.item] || 0) + 1;
+  save();
+  renderBar();
+  toast("✓ " + it.item + " added");
+}
+
+function totals(){
+  var n = 0, sum = 0;
+  Object.keys(CART).forEach(function(k){
+    var qty = CART[k];
+    var it = ITEMS.find(function(x){ return x.item === k; });
+    if(it){ n += qty; sum += qty * it.price; }
+  });
+  var disc = Math.round((sum * COUPON.discount) / 100);
+  return { count: n, sum: sum, disc: disc, finalTotal: Math.max(0, sum - disc) };
+}
+
+function renderBar(){
+  var t = totals();
+  var b = document.getElementById("cbar");
+  document.body.classList.toggle("hascart", t.count > 0);
+  if(t.count > 0){
+    b.className = "cbar show";
+    document.getElementById("cbar-text").textContent = "🧾 " + T[LANG].myorder + " · " + t.count + " " + (t.count === 1 ? T[LANG].item : T[LANG].items);
+    document.getElementById("cbar-price").textContent = "₹" + t.finalTotal + " · " + T[LANG].view + " ›";
+  } else {
+    b.className = "cbar";
+  }
+  updateHistoryBadge();
+}
+
+function updateHistoryBadge(){
+  var el = document.getElementById("histCount");
+  if(ORDER_HIST.length > 0){
+    el.style.display = "inline-block";
+    el.textContent = ORDER_HIST.length;
+  } else {
+    el.style.display = "none";
+  }
+}
+
+function showDetail(it){
+  var userRating = RATINGS[it.item] || 0;
+  var starsHtml = [1,2,3,4,5].map(function(s){
+    return '<button style="background:none;border:0;font-size:24px;cursor:pointer;color:' + (s <= userRating ? '#f59e0b' : '#d1c7bc') + '" onclick="rateDish(\'' + it.item + '\',' + s + ')">★</button>';
+  }).join('');
+
+  var h = 
+    '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+    '<div class="vid">' + it.emoji + '</div>' +
+    '<div class="row"><h2>' + it.item + '</h2><div class="pr" style="font-size:20px">₹' + it.price + '</div></div>' +
+    '<div class="tags"><span>' + (it.veg === 'yes' ? '🟢 Veg' : '🔴 Non-veg') + '</span><span>' + it.spice + '</span><span>' + it.tag + '</span></div>' +
+    '<p style="font-size:13px;line-height:1.5;color:#453d33">' + it.description + '</p>' +
+    '<p style="font-size:12px;color:#7d7162"><b>Tastes like:</b> ' + it.tastes_like + '</p>' +
+    '<p style="font-size:12px;color:#7d7162"><b>Ingredients:</b> ' + it.ingredients + '</p>' +
+    '<div style="margin:12px 0;padding:10px;background:#eee5d8;border-radius:12px;display:flex;justify-content:space-between;align-items:center">' +
+      '<span style="font-size:12px;font-weight:700">Rate this dish:</span>' +
+      '<div>' + starsHtml + '</div>' +
+    '</div>' +
+    '<button class="wa" style="background:#292621" onclick="CART[\'' + it.item + '\']=(CART[\'' + it.item + '\']||0)+1;save();renderBar();closeSheet();toast(\'✓ Added to order\')">➕ ' + T[LANG].add + ' · ₹' + it.price + '</button>';
+
+  openSheet(h);
+}
+
+function rateDish(itemName, r){
+  RATINGS[itemName] = r;
+  save();
+  renderList();
+  var it = ITEMS.find(function(x){ return x.item === itemName; });
+  if(it) showDetail(it);
+  toast("⭐ Rated " + r + "/5");
+}
+
+function openCart(){
+  var t = totals();
+  var ks = Object.keys(CART);
+  if(!ks.length){
+    openSheet(
+      '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+      '<div style="text-align:center;padding:40px 0;color:#7d7162">' +
+        '<div style="font-size:48px">🍽️</div>' +
+        '<h3 style="font:700 18px \'Playfair Display\',serif;margin:8px 0 4px">Your order tray is empty</h3>' +
+        '<p style="font-size:12px">Tap + on any dish to add here.</p>' +
+        (ORDER_HIST.length ? '<button class="clr" style="background:#292621;color:#fff;width:auto;padding:8px 16px;margin-top:10px" onclick="openHistory()">📜 Re-order previous meal</button>' : '') +
+      '</div>'
+    );
+    return;
+  }
+
+  var itemsHtml = ks.map(function(k){
+    var it = ITEMS.find(function(x){ return x.item === k; });
+    var qty = CART[k];
+    return '<div class="cr">' +
+      '<b>' + it.emoji + ' ' + k + '</b>' +
+      '<button onclick="changeQty(\'' + k + '\',-1)">−</button>' +
+      '<span>' + qty + '</span>' +
+      '<button onclick="changeQty(\'' + k + '\',1)">+</button>' +
+      '<span style="width:60px;text-align:right">₹' + (qty * it.price) + '</span>' +
+    '</div>';
+  }).join('');
+
+  var typeSwitchHtml = 
+    '<div style="margin-top:12px">' +
+      '<div style="font-size:11px;font-weight:700;color:#6d6152;margin-bottom:6px">Order Type:</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">' +
+        '<button onclick="ORDER_TYPE=\'dine_in\';openCart()" style="padding:8px 4px;border:1px solid #dcd1c2;border-radius:10px;font:700 11px system-ui;cursor:pointer;background:' + (ORDER_TYPE==='dine_in'?'#292621':'#fff') + ';color:' + (ORDER_TYPE==='dine_in'?'#fff':'#333') + '">🪑 Dine-in</button>' +
+        '<button onclick="ORDER_TYPE=\'delivery\';openCart()" style="padding:8px 4px;border:1px solid #dcd1c2;border-radius:10px;font:700 11px system-ui;cursor:pointer;background:' + (ORDER_TYPE==='delivery'?'#292621':'#fff') + ';color:' + (ORDER_TYPE==='delivery'?'#fff':'#333') + '">🛵 Delivery</button>' +
+        '<button onclick="ORDER_TYPE=\'takeaway\';openCart()" style="padding:8px 4px;border:1px solid #dcd1c2;border-radius:10px;font:700 11px system-ui;cursor:pointer;background:' + (ORDER_TYPE==='takeaway'?'#292621':'#fff') + ';color:' + (ORDER_TYPE==='takeaway'?'#fff':'#333') + '">🛍️ Takeaway</button>' +
+      '</div>' +
+    '</div>';
+
+  var detailsFieldsHtml = '';
+  if(ORDER_TYPE === 'delivery'){
+    detailsFieldsHtml = 
+      '<input id="in-name" placeholder="Your Name *" value="' + CNAME + '" oninput="CNAME=this.value;save()" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">' +
+      '<input id="in-phone" type="tel" placeholder="Mobile / WhatsApp Number *" value="' + CONTACT_PHONE + '" oninput="CONTACT_PHONE=this.value;save()" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">' +
+      '<textarea id="in-addr" rows="2" placeholder="Full Delivery Address (Flat/Room, Building, Area, Landmark) *" oninput="DELIVERY_ADDR=this.value;save()" style="width:100%;padding:8px 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px;resize:none">' + DELIVERY_ADDR + '</textarea>' +
+      '<div style="font-size:11px;color:#059669;background:#ecfdf5;padding:6px 10px;border-radius:8px;margin-top:6px">🛵 Delivery across Ambernath. Pay online via UPI or Cash.</div>';
+  } else if(ORDER_TYPE === 'takeaway'){
+    detailsFieldsHtml = 
+      '<input id="in-name" placeholder="Your Name *" value="' + CNAME + '" oninput="CNAME=this.value;save()" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">' +
+      '<input id="in-phone" type="tel" placeholder="Mobile Number (Optional)" value="' + CONTACT_PHONE + '" oninput="CONTACT_PHONE=this.value;save()" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">' +
+      '<div style="font-size:11px;color:#857769;margin-top:6px">🛍️ Your parcel will be packed and kept ready for pickup at Kiki Cafe.</div>';
+  } else {
+    detailsFieldsHtml = 
+      '<input id="in-tbl" placeholder="Table no. (e.g. 4)" value="' + TBL + '" oninput="TBL=this.value;save()" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">' +
+      '<input id="in-name" placeholder="Your name (optional)" value="' + CNAME + '" oninput="CNAME=this.value;save()" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">';
+  }
+
+  var h = 
+    '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+    '<h2 style="margin:4px 0 12px;font:700 20px \'Playfair Display\',serif">' + T[LANG].myorder + '</h2>' +
+    itemsHtml +
+    '<div style="margin-top:12px;padding:10px;background:#fff;border-radius:12px;border:1px solid #e4ddd3;font-size:12px">' +
+      '<div style="display:flex;justify-content:space-between"><span>Subtotal:</span><span>₹' + t.sum + '</span></div>' +
+      (t.disc ? '<div style="display:flex;justify-content:space-between;color:#059669"><span>Discount (' + COUPON.discount + '%):</span><span>-₹' + t.disc + '</span></div>' : '') +
+      '<div class="tot"><span>' + T[LANG].total + ':</span><span>₹' + t.finalTotal + '</span></div>' +
+    '</div>' +
+    typeSwitchHtml +
+    detailsFieldsHtml +
+    '<input id="in-note" placeholder="Special note e.g. less spicy, extra ketchup" value="' + CNOTE + '" oninput="CNOTE=this.value" style="width:100%;height:38px;padding:0 12px;border:1px solid #dcd1c2;border-radius:10px;margin-top:8px;font-size:13px">' +
+    '<button class="wa" onclick="sendOrderWA()">💬 ' + T[LANG].sendwa + '</button>' +
+    '<button class="clr" style="background:#5f259f;color:#fff" onclick="payUpi(' + t.finalTotal + ')">💳 ' + T[LANG].pay + ' ₹' + t.finalTotal + '</button>' +
+    '<button class="clr" onclick="CART={};save();renderBar();closeSheet();toast(\'Order cleared\')">' + T[LANG].clear + '</button>';
+
+  openSheet(h);
+}
+
+function changeQty(k, d){
+  CART[k] = (CART[k] || 0) + d;
+  if(CART[k] <= 0) delete CART[k];
+  save();
+  renderBar();
+  openCart();
+}
+
+function sendOrderWA(){
+  var ks = Object.keys(CART);
+  if(!ks.length) return;
+
+  if(ORDER_TYPE === 'delivery' && !DELIVERY_ADDR.trim()){
+    toast("⚠️ Please enter Delivery Address");
+    return;
+  }
+
+  var t = totals();
+  var id = "#" + Math.floor(1000 + Math.random() * 9000);
+  var when = new Date().toLocaleString("en-IN", {day:"2-digit",month:"short",hour:"numeric",minute:"2-digit",hour12:true});
+  var ln = "━━━━━━━━━━━━━━";
+
+  var m = "🍽️ *" + CAFE.name.toUpperCase() + "*\n" + ln + "\n";
+  if(ORDER_TYPE === 'delivery'){
+    m += "🛵 *Home Delivery Order* " + id + "\n";
+    if(CNAME) m += "👤 Customer: *" + CNAME + "*\n";
+    if(CONTACT_PHONE) m += "📞 Phone: *" + CONTACT_PHONE + "*\n";
+    if(DELIVERY_ADDR) m += "📍 Address: *" + DELIVERY_ADDR + "*\n";
+  } else if(ORDER_TYPE === 'takeaway'){
+    m += "🛍️ *Takeaway / Parcel Order* " + id + "\n";
+    if(CNAME) m += "👤 Customer: *" + CNAME + "*\n";
+    if(CONTACT_PHONE) m += "📞 Phone: *" + CONTACT_PHONE + "*\n";
+  } else {
+    m += "🪑 *Dine-in Order* " + id + "\n";
+    if(TBL) m += "🪑 Table: *" + TBL + "*\n";
+    if(CNAME) m += "👤 Customer: *" + CNAME + "*\n";
+  }
+
+  m += "🕒 " + when + "\n" + ln + "\n*Items (" + t.count + ")*\n";
+
+  var histItems = [];
+  ks.forEach(function(k, idx){
+    var it = ITEMS.find(function(x){ return x.item === k; });
+    var qty = CART[k];
+    m += (idx + 1) + ". " + it.emoji + " " + k + " × " + qty + " — ₹" + (qty * it.price) + "\n";
+    histItems.push({ item: it, quantity: qty });
+  });
+
+  m += ln + "\n";
+  if(t.disc) m += "🎟️ Discount: " + COUPON.discount + "% (Code: " + COUPON.code + ")\n";
+  m += "💰 *Total: ₹" + t.finalTotal + "*\n" + ln + "\n";
+  if(CNOTE) m += "📝 Note: _" + CNOTE + "_\n";
+  m += "_Sent from " + CAFE.name + " menu_";
+
+  // SAVE TO ORDER HISTORY (in localStorage!)
+  var orderRecord = {
+    id: id,
+    items: histItems,
+    total: t.finalTotal,
+    type: ORDER_TYPE,
+    table: TBL,
+    address: DELIVERY_ADDR,
+    timestamp: when,
+    note: CNOTE
+  };
+  ORDER_HIST.unshift(orderRecord);
+  ORDER_HIST = ORDER_HIST.slice(0, 25);
+  save();
+  updateHistoryBadge();
+
+  // WhatsApp Redirect
+  window.open("https://wa.me/" + CAFE.whatsapp + "?text=" + encodeURIComponent(m), "_blank");
+
+  CART = {};
+  save();
+  renderBar();
+  closeSheet();
+  openFeedback(id);
+}
+
+function payUpi(tot){
+  var u = "upi://pay?pa=" + CAFE.upi + "&pn=" + encodeURIComponent(CAFE.name) + "&am=" + tot + "&cu=INR&tn=" + encodeURIComponent("Kiki Cafe Order " + (TBL ? "Table " + TBL : ""));
+  window.location.href = u;
+}
+
+/* ================= ORDER HISTORY PANEL ================= */
+function openHistory(){
+  if(!ORDER_HIST.length){
+    openSheet(
+      '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+      '<div style="text-align:center;padding:40px 0;color:#7d7162">' +
+        '<div style="font-size:48px">📜</div>' +
+        '<h3 style="font:700 18px \'Playfair Display\',serif;margin:8px 0 4px">' + T[LANG].nohist + '</h3>' +
+        '<p style="font-size:12px">' + T[LANG].nohistdesc + '</p>' +
+      '</div>'
+    );
+    return;
+  }
+
+  var listHtml = ORDER_HIST.map(function(order, oIdx){
+    var itemsList = order.items.map(function(ci){
+      return '<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0">' +
+        '<span>' + ci.item.emoji + ' ' + ci.item.item + ' × ' + ci.quantity + '</span>' +
+        '<b>₹' + (ci.item.price * ci.quantity) + '</b>' +
+      '</div>';
+    }).join('');
+
+    return '<div class="h-item">' +
+      '<div class="h-head">' +
+        '<div>' +
+          '<b>' + order.id + '</b>' + (order.table ? ' <span style="font-size:11px;background:#eee5d8;padding:2px 6px;border-radius:6px">Table #' + order.table + '</span>' : '') +
+          '<div style="font-size:10px;color:#8a7f72;margin-top:2px">' + order.timestamp + '</div>' +
+        '</div>' +
+        '<div style="font:700 15px system-ui">₹' + order.total + '</div>' +
+      '</div>' +
+      '<div style="border-top:1px dashed #eee;padding-top:6px">' + itemsList + '</div>' +
+      '<button class="h-reorder" onclick="reorderMeal(' + oIdx + ')">🔄 ' + T[LANG].reorder + '</button>' +
+    '</div>';
+  }).join('');
+
+  var h = 
+    '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+      '<h2 style="margin:0;font:700 20px \'Playfair Display\',serif">📜 ' + T[LANG].history + '</h2>' +
+      '<button onclick="ORDER_HIST=[];save();openHistory();updateHistoryBadge();" style="border:0;background:none;color:#e11d48;font-size:11px;cursor:pointer;font-weight:700">Clear</button>' +
+    '</div>' +
+    listHtml;
+
+  openSheet(h);
+}
+
+function reorderMeal(idx){
+  var order = ORDER_HIST[idx];
+  if(!order) return;
+  order.items.forEach(function(ci){
+    CART[ci.item.item] = (CART[ci.item.item] || 0) + ci.quantity;
+  });
+  if(order.table) TBL = order.table;
+  save();
+  renderBar();
+  closeSheet();
+  toast(T[LANG].reordered);
+  setTimeout(openCart, 300);
+}
+
+function serviceCall(type){
+  var isCall = type === 'call';
+  var msg = (isCall ? "🔔 *Waiter Called*" : "🧾 *Bill Requested*") + "\n🪑 Table: *" + (TBL || "Counter") + "*\n🕒 " + new Date().toLocaleTimeString("en-IN") + "\n_" + CAFE.name + " Digital Menu_";
+  window.open("https://wa.me/" + CAFE.whatsapp + "?text=" + encodeURIComponent(msg), "_blank");
+  toast(isCall ? "🔔 Waiter alerted" : "🧾 Bill requested");
+}
+
+function openCoupons(){
+  openSheet(
+    '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+    '<h2 style="font:700 20px \'Playfair Display\',serif;margin:4px 0 10px">🎁 Offers & Coupons</h2>' +
+    '<div style="padding:14px;border:1px dashed #8a5a2b;border-radius:14px;background:#f5ecdf">' +
+      '<b>FIRST10</b> · 10% Flat Discount<p style="font-size:12px;margin:4px 0">Valid on all pizzas, pastas, frappes and mojitos.</p>' +
+      '<button class="wa" style="margin-top:8px" onclick="COUPON={code:\'FIRST10\',discount:10};renderBar();closeSheet();toast(\'🎁 10% Coupon applied!\')">Apply Code FIRST10</button>' +
+    '</div>'
+  );
+}
+
+function openStatus(){
+  var last = ORDER_HIST[0];
+  openSheet(
+    '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+    '<h2 style="font:700 20px \'Playfair Display\',serif;margin:4px 0 10px">⏱️ Active Order Status</h2>' +
+    (last ? 
+      '<div style="padding:14px;background:#fff;border-radius:14px;border:1px solid #e4ddd3">' +
+        '<b>Order ' + last.id + '</b> (Table #' + (last.table || 'Counter') + ')' +
+        '<div style="display:flex;gap:8px;margin-top:12px;text-align:center;font-size:11px">' +
+          '<div style="flex:1;background:#292621;color:#fff;padding:6px;border-radius:8px">1. Placed ✓</div>' +
+          '<div style="flex:1;background:#eee5d8;color:#292621;padding:6px;border-radius:8px">2. Preparing 🔥</div>' +
+          '<div style="flex:1;background:#eee5d8;color:#292621;padding:6px;border-radius:8px">3. Ready ✨</div>' +
+        '</div>' +
+      '</div>'
+      : '<p style="font-size:13px;color:#7d7162">No active orders placed yet.</p>'
+    )
+  );
+}
+
+function openFeedback(orderId){
+  openSheet(
+    '<div class="grab"></div><button class="x" onclick="closeSheet()">✕</button>' +
+    '<h2 style="text-align:center;font:700 22px \'Playfair Display\',serif;margin:6px 0">Thank You! 🙏</h2>' +
+    '<p style="text-align:center;font-size:13px;color:#7d7162">Order ' + (orderId || '') + ' sent to Kiki Cafe.</p>' +
+    '<a class="wa" style="text-decoration:none;margin-top:12px" href="' + CAFE.reviewUrl + '" target="_blank">⭐ Rate us on Google Reviews</a>'
+  );
+}
+
+function openSheet(h){
+  document.getElementById("panel").innerHTML = h;
+  document.getElementById("sheet").classList.add("show");
+}
+
+function closeSheet(){
+  document.getElementById("sheet").classList.remove("show");
+}
+
+document.getElementById("q").oninput = renderList;
+renderNav();
+renderList();
+renderBar();
+</script>
+</body>
+</html>
