@@ -4,35 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cafe Menu</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8a5a2b">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
-:root{--bg:#faf3ea;--card:#fff;--ink:#3b2a20;--mute:#8a7566;--acc:#8a5a2b;--line:#eadccb}
-@media (prefers-color-scheme:dark){:root{--bg:#1f1812;--card:#2a2119;--ink:#f3e8da;--mute:#b3a08c;--line:#3a2e24}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,serif;max-width:480px;margin:0 auto}
-header{padding:20px 16px 6px;text-align:center}
-h1{margin:0;font-size:26px}
-.sub{color:var(--mute);font:13px system-ui,sans-serif;margin-top:4px}
-nav{display:flex;gap:8px;padding:10px 16px;position:sticky;top:0;background:var(--bg);z-index:2;overflow-x:auto}
-nav button{flex:none;padding:9px 16px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;font:600 14px system-ui,sans-serif}
-nav button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-.item{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 16px 10px;padding:10px;cursor:pointer}
+:root{--bg:#faf3ea;--card:#fff;--ink:#3b2a20;--mute:#8a7566;--acc:#8a5a2b;--line:#eadccb;--hero:#f1dfc6;--on:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;max-width:480px;margin:0 auto;padding-bottom:30px}
+header{padding:calc(26px + env(safe-area-inset-top,0px)) 20px 18px;text-align:center;background:linear-gradient(180deg,var(--hero),var(--bg));border-radius:0 0 28px 28px}
+h1{margin:0;font:700 32px Georgia,'Times New Roman',serif;letter-spacing:.5px}
+.sub{color:var(--mute);font-size:13px;margin-top:6px}
+nav{display:flex;gap:8px;padding:12px 16px;position:sticky;top:0;background:var(--bg);z-index:2;overflow-x:auto;scrollbar-width:none}
+nav button{flex:none;padding:9px 18px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:22px;font:600 14px system-ui,sans-serif}
+nav button.on{background:var(--acc);color:var(--on);border-color:var(--acc);box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.item{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;margin:0 16px 12px;padding:12px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:transform .15s}
+.item:active{transform:scale(.98)}
 .item.out{opacity:.5}
-.th{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;flex:none;background:var(--line) center/cover}
-.th i{position:absolute;right:4px;bottom:4px;font:10px system-ui;font-style:normal;background:rgba(0,0,0,.6);color:#fff;border-radius:8px;padding:1px 5px}
-.nm{font-weight:700;font-size:16px}
-.ds{font:12px system-ui,sans-serif;color:var(--mute);margin-top:2px}
-.pr{margin-left:auto;font:700 15px system-ui,sans-serif;color:var(--acc)}
+.th{width:76px;height:76px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;flex:none;background:var(--hero) center/cover}
+.th i{position:absolute;right:5px;bottom:5px;font:600 10px system-ui;font-style:normal;background:var(--acc);color:var(--on);border-radius:10px;padding:2px 7px}
+.nm{font:700 17px Georgia,'Times New Roman',serif}
+.ds{display:inline-block;margin-top:6px;font:600 11px system-ui,sans-serif;color:var(--acc);background:var(--hero);border-radius:10px;padding:3px 9px}
+.pr{margin-left:auto;font:700 16px system-ui,sans-serif;color:var(--acc);white-space:nowrap}
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:5}
 .sheet.show{display:flex}
-.panel{background:var(--bg);width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:14px 16px 20px;max-height:92%;overflow:auto}
-.vid{height:240px;border-radius:14px;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:80px;overflow:hidden}
+.panel{background:var(--bg);width:100%;max-width:480px;border-radius:26px 26px 0 0;padding:16px 18px calc(22px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto;animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.vid{height:260px;border-radius:20px;background:var(--hero);display:flex;align-items:center;justify-content:center;font-size:90px;overflow:hidden}
 .vid video,.vid img{width:100%;height:100%;object-fit:cover}
-.row{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
-.row h2{margin:0;font-size:22px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;font:12px system-ui,sans-serif}
-.tags span{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:3px 9px}
-p{font:14px/1.5 system-ui,sans-serif;margin:6px 0}
-.x{float:right;border:0;background:var(--card);color:var(--ink);border-radius:50%;width:32px;height:32px;margin-bottom:6px}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;gap:10px}
+.row h2{margin:0;font:700 24px Georgia,'Times New Roman',serif}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;font-size:12px}
+.tags span{background:var(--hero);color:var(--ink);border-radius:12px;padding:4px 10px;font-weight:600}
+p{font-size:14px;line-height:1.55;margin:7px 0}
+.x{float:right;border:0;background:var(--card);color:var(--ink);border-radius:50%;width:34px;height:34px;margin-bottom:8px;font-size:15px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+
+header h1,.sub{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.sub{animation-delay:.08s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}}
+@keyframes fade{from{opacity:0}}
+@keyframes fadeout{to{opacity:0}}
+@keyframes down{to{transform:translateY(100%)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes bob{50%{transform:translateY(-8px) scale(1.06)}}
+.item{animation:pop .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
+.item:active{transform:scale(.97);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.item:active .th{transform:scale(1.08) rotate(-3deg)}
+.th{transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+nav button{transition:background .2s,color .2s,transform .15s,box-shadow .2s}
+nav button:active{transform:scale(.92)}
+.sheet.show{animation:fade .2s both}
+.sheet.closing{animation:fadeout .22s both}
+.sheet.closing .panel{animation:down .22s ease-in both}
+.panel{animation:up .35s cubic-bezier(.2,.9,.3,1.15) both;touch-action:pan-y}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.vid{background:linear-gradient(100deg,var(--hero) 30%,var(--card) 50%,var(--hero) 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.vid video{opacity:0;transition:opacity .4s}
+.vid video.on{opacity:1}
+.vid>span,.vid.emo{animation:bob 2.6s ease-in-out infinite}
+.row,.tags,p{animation:rise .4s .12s cubic-bezier(.2,.8,.2,1) both}
+.x:active{transform:scale(.88)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.inst{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;border:0;border-radius:24px;padding:12px 20px;background:var(--acc);color:var(--on);font:700 14px system-ui,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3);display:none}
 </style>
 </head>
 <body>
@@ -44,9 +80,9 @@ p{font:14px/1.5 system-ui,sans-serif;margin:6px 0}
 <script>
 /* ============ EDIT ONLY THIS BLOCK FOR EACH NEW CAFE ============ */
 var CAFE = {
-  name: "Chaitu Cafe",
+  name: "Kiki Cafe",
   tagline: "Ambernath · Tap any dish to see how it looks",
-  accent: "#8a5a2b",
+  theme: "warm",   /* warm / fresh / night / berry */
 
   /* Option A: paste a published Google Sheet CSV link here (File > Share > Publish to web > CSV).
      Leave "" to use the ITEMS list below instead. */
@@ -643,6 +679,12 @@ var CAFE = {
 };
 /* ================================================================ */
 
+var THEMES={
+ warm:{bg:"#faf3ea",card:"#ffffff",ink:"#3b2a20",mute:"#8a7566",acc:"#8a5a2b",line:"#eadccb",hero:"#f1dfc6",on:"#ffffff"},
+ fresh:{bg:"#f3f8f1",card:"#ffffff",ink:"#1f3326",mute:"#6b8272",acc:"#2e7d4f",line:"#d9e8dc",hero:"#dcefd9",on:"#ffffff"},
+ night:{bg:"#14161f",card:"#1e2130",ink:"#f2eee4",mute:"#a3a6b8",acc:"#e8b04a",line:"#2c3045",hero:"#262a3f",on:"#14161f"},
+ berry:{bg:"#fff4f6",card:"#ffffff",ink:"#4a1d2b",mute:"#9a6a77",acc:"#b3265a",line:"#f3d6df",hero:"#fbdbe5",on:"#ffffff"}
+};
 var items=[],cats=[],cur="";
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function csv(t){var r=[],row=[],f="",q=false;for(var i=0;i<t.length;i++){var c=t[i];
@@ -657,7 +699,7 @@ function start(){
  document.getElementById("cname").textContent=CAFE.name;
  document.getElementById("ctag").textContent=CAFE.tagline;
  document.title=CAFE.name+" – Menu";
- document.documentElement.style.setProperty("--acc",CAFE.accent);
+ var T=THEMES[CAFE.theme]||THEMES.warm;Object.keys(T).forEach(function(k){document.documentElement.style.setProperty("--"+k,T[k])});
  if(CAFE.sheetCsvUrl){
   fetch(CAFE.sheetCsvUrl).then(function(r){return r.text()}).then(function(t){init(csv(t))})
    .catch(function(){init(CAFE.items)});
@@ -666,20 +708,29 @@ function start(){
 function init(arr){items=arr;cats=[];items.forEach(function(d){if(cats.indexOf(d.category)<0)cats.push(d.category)});cur=cats[0];nav();list()}
 function nav(){var n=document.getElementById("nav");n.innerHTML="";cats.forEach(function(c){var b=document.createElement("button");b.textContent=c;b.className=c==cur?"on":"";b.onclick=function(){cur=c;nav();list()};n.appendChild(b)})}
 function list(){var l=document.getElementById("list");l.innerHTML="";
- items.forEach(function(d,i){if(d.category!=cur)return;var e=document.createElement("div");e.className="item"+(d.available?"":" out");
+ var k=0;items.forEach(function(d,i){if(d.category!=cur)return;var e=document.createElement("div");e.className="item"+(d.available?"":" out");
   var bg=d.photo?' style="background-image:url('+esc(d.photo)+')"':"";
   e.innerHTML='<div class="th"'+bg+'>'+(d.photo?"":esc(d.emoji||"🍽"))+(d.video?"<i>▶</i>":"")+'</div><div><div class="nm">'+esc(d.item)+'</div><div class="ds">'+esc(d.available?d.tag:"Out of stock")+'</div></div><div class="pr">₹'+esc(d.price)+'</div>';
-  e.onclick=function(){show(d)};l.appendChild(e)})}
+  e.style.setProperty("--i",k++);e.onclick=function(){show(d)};l.appendChild(e)})}
 function show(d){
- var media=d.video?'<video src="'+esc(d.video)+'" poster="'+esc(d.photo)+'" muted loop playsinline autoplay></video>':(d.photo?'<img src="'+esc(d.photo)+'" alt="">':esc(d.emoji||"🍽"));
- document.getElementById("panel").innerHTML='<button class="x" onclick="shut()">✕</button><div class="vid">'+media+'</div>'+
+ var media=d.video?'<video src="'+esc(d.video)+'" poster="'+esc(d.photo)+'" muted loop playsinline autoplay onloadeddata="this.className=&quot;on&quot;"></video>':(d.photo?'<img src="'+esc(d.photo)+'" alt="">':esc(d.emoji||"🍽"));
+ document.getElementById("panel").innerHTML='<div class="grab"></div><button class="x" onclick="shut()">✕</button><div class="vid'+(d.video||d.photo?'':' emo')+'">'+media+'</div>'+
  '<div class="row"><h2>'+esc(d.item)+'</h2><div class="pr">₹'+esc(d.price)+'</div></div>'+
  '<div class="tags"><span>'+(/^y/i.test(d.veg)?"🟢 Veg":"🔴 Non-veg")+'</span>'+(d.spice?'<span>'+esc(d.spice)+'</span>':"")+(d.tag?'<span>'+esc(d.tag)+'</span>':"")+(d.available?"":"<span>Out of stock</span>")+'</div>'+
  '<p>'+esc(d.description)+'</p>'+(d.tastes_like?'<p><b>Tastes like:</b> '+esc(d.tastes_like)+'</p>':"")+(d.ingredients?'<p><b>Ingredients:</b> '+esc(d.ingredients)+'</p>':"");
  document.getElementById("sheet").classList.add("show")}
-function shut(){document.getElementById("sheet").classList.remove("show");var v=document.querySelector("#panel video");if(v)v.pause()}
+function shut(){var s=document.getElementById("sheet");if(!s.classList.contains("show")||s.classList.contains("closing"))return;s.classList.add("closing");setTimeout(function(){s.classList.remove("show","closing");var v=document.querySelector("#panel video");if(v)v.pause()},220)}
 document.getElementById("sheet").onclick=function(e){if(e.target==this)shut()};
+var sy=0,dy=0,P=document.getElementById("panel");
+P.addEventListener("touchstart",function(e){sy=e.touches[0].clientY;dy=0},{passive:true});
+P.addEventListener("touchmove",function(e){dy=e.touches[0].clientY-sy;if(dy>0&&P.scrollTop<=0){P.style.transition="none";P.style.transform="translateY("+dy+"px)"}},{passive:true});
+P.addEventListener("touchend",function(){P.style.transition="";P.style.transform="";if(dy>110&&P.scrollTop<=0)shut();dy=0});
 start();
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+var dp=null,ib=document.createElement("button");ib.className="inst";ib.textContent="📲 Install app";document.body.appendChild(ib);
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e;ib.style.display="block"});
+ib.onclick=function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;ib.style.display="none"})};
+window.addEventListener("appinstalled",function(){ib.style.display="none"});
 </script>
 </body>
 </html>
