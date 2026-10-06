@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cafe Menu</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8a5a2b">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#faf3ea;--card:#fff;--ink:#3b2a20;--mute:#8a7566;--acc:#8a5a2b;--line:#eadccb;--hero:#f1dfc6;--on:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;max-width:480px;margin:0 auto;padding-bottom:30px}
+header{padding:calc(26px + env(safe-area-inset-top,0px)) 20px 18px;text-align:center;background:linear-gradient(180deg,var(--hero),var(--bg));border-radius:0 0 28px 28px}
+h1{margin:0;font:700 32px Georgia,'Times New Roman',serif;letter-spacing:.5px}
+.sub{color:var(--mute);font-size:13px;margin-top:6px}
+nav{display:flex;gap:8px;padding:12px 16px;position:sticky;top:0;background:var(--bg);z-index:2;overflow-x:auto;scrollbar-width:none}
+nav button{flex:none;padding:9px 18px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:22px;font:600 14px system-ui,sans-serif}
+nav button.on{background:var(--acc);color:var(--on);border-color:var(--acc);box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.item{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;margin:0 16px 12px;padding:12px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:transform .15s}
+.item:active{transform:scale(.98)}
+.item.out{opacity:.5}
+.th{width:76px;height:76px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;flex:none;background:var(--hero) center/cover}
+.th i{position:absolute;right:5px;bottom:5px;font:600 10px system-ui;font-style:normal;background:var(--acc);color:var(--on);border-radius:10px;padding:2px 7px}
+.nm{font:700 17px Georgia,'Times New Roman',serif}
+.ds{display:inline-block;margin-top:6px;font:600 11px system-ui,sans-serif;color:var(--acc);background:var(--hero);border-radius:10px;padding:3px 9px}
+.pr{margin-left:auto;font:700 16px system-ui,sans-serif;color:var(--acc);white-space:nowrap}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:5}
+.sheet.show{display:flex}
+.panel{background:var(--bg);width:100%;max-width:480px;border-radius:26px 26px 0 0;padding:16px 18px calc(22px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto;animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.vid{height:260px;border-radius:20px;background:var(--hero);display:flex;align-items:center;justify-content:center;font-size:90px;overflow:hidden}
+.vid video,.vid img{width:100%;height:100%;object-fit:cover}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;gap:10px}
+.row h2{margin:0;font:700 24px Georgia,'Times New Roman',serif}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;font-size:12px}
+.tags span{background:var(--hero);color:var(--ink);border-radius:12px;padding:4px 10px;font-weight:600}
+p{font-size:14px;line-height:1.55;margin:7px 0}
+.x{float:right;border:0;background:var(--card);color:var(--ink);border-radius:50%;width:34px;height:34px;margin-bottom:8px;font-size:15px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+
+header h1,.sub{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.sub{animation-delay:.08s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}}
+@keyframes fade{from{opacity:0}}
+@keyframes fadeout{to{opacity:0}}
+@keyframes down{to{transform:translateY(100%)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes bob{50%{transform:translateY(-8px) scale(1.06)}}
+.item{animation:pop .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
+.item:active{transform:scale(.97);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.item:active .th{transform:scale(1.08) rotate(-3deg)}
+.th{transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+nav button{transition:background .2s,color .2s,transform .15s,box-shadow .2s}
+nav button:active{transform:scale(.92)}
+.sheet.show{animation:fade .2s both}
+.sheet.closing{animation:fadeout .22s both}
+.sheet.closing .panel{animation:down .22s ease-in both}
+.panel{animation:up .35s cubic-bezier(.2,.9,.3,1.15) both;touch-action:pan-y}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.vid{background:linear-gradient(100deg,var(--hero) 30%,var(--card) 50%,var(--hero) 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.vid video{opacity:0;transition:opacity .4s}
+.vid video.on{opacity:1}
+.vid>span,.vid.emo{animation:bob 2.6s ease-in-out infinite}
+.row,.tags,p{animation:rise .4s .12s cubic-bezier(.2,.8,.2,1) both}
+.x:active{transform:scale(.88)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.inst{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;border:0;border-radius:24px;padding:12px 20px;background:var(--acc);color:var(--on);font:700 14px system-ui,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3);display:none}
+.tools{padding:4px 16px 0}
+#q{width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);font:15px system-ui,sans-serif;outline:none}
+#q:focus{border-color:var(--acc)}
+#chips{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+#chips button{flex:none;padding:7px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:18px;font:600 13px system-ui,sans-serif}
+#chips button.on{background:var(--hero);border-color:var(--acc);color:var(--acc)}
+.plus{margin-left:8px;flex:none;width:34px;height:34px;border-radius:50%;border:0;background:var(--acc);color:var(--on);font:700 20px/1 system-ui;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.plus:active{transform:scale(.85)}
+.cbar{position:fixed;left:16px;right:16px;max-width:448px;margin:0 auto;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:4;display:none;justify-content:space-between;align-items:center;background:var(--acc);color:var(--on);border-radius:20px;padding:14px 18px;font:700 15px system-ui,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.3);cursor:pointer}
+.cbar.show{display:flex;animation:rise .3s both}
+.cbar.bump{animation:bump .3s}
+@keyframes bump{50%{transform:scale(1.04)}}
+body.hascart{padding-bottom:100px}
+body.hascart .inst{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+.addbtn{width:100%;margin-top:14px;padding:14px;border:0;border-radius:16px;background:var(--acc);color:var(--on);font:700 15px system-ui,sans-serif}
+.review{display:block;margin:6px 16px 20px;text-align:center;padding:14px;border-radius:16px;border:1px solid var(--acc);color:var(--acc);text-decoration:none;font:700 14px system-ui,sans-serif;background:var(--card)}
+.empty{text-align:center;color:var(--mute);padding:30px 0}
+.cr{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.cr b{flex:1}
+.cr button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 16px system-ui}
+.tot{display:flex;justify-content:space-between;font:700 18px system-ui,sans-serif;margin:14px 0 4px}
+.clr{width:100%;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--mute);font:600 14px system-ui,sans-serif}
+</style>
+</head>
+<body>
+<header><h1 id="cname"></h1><div class="sub" id="ctag"></div></header>
+<div class="tools"><input id="q" type="search" placeholder="🔍 Search dishes..."><div id="chips"></div></div>
+<nav id="nav"></nav>
+<main id="list"></main>
+<div class="cbar" id="cbar" onclick="openCart()"></div>
+<div class="sheet" id="sheet"><div class="panel" id="panel"></div></div>
+
+<script>
+/* ============ EDIT ONLY THIS BLOCK FOR EACH NEW CAFE ============ */
+var CAFE = {
+  name: "Kiki Cafe",
+  tagline: "Ambernath · Tap any dish to see how it looks",
+  theme: "warm",   /* warm / fresh / night / berry */
+  reviewUrl: "https://www.google.com/maps/search/?api=1&query=Kiki+Cafe+Ambernath",  /* paste the cafe's Google review link; "" hides the button */
+
+  /* Option A: paste a published Google Sheet CSV link here (File > Share > Publish to web > CSV).
+     Leave "" to use the ITEMS list below instead. */
+  sheetCsvUrl: "",
+
+  /* Option B: items typed here. video / photo are optional links. available:false shows "Out of stock". */
+  items: [
+ {
+  "category": "Pizza",
+  "item": "Margherita",
+  "price": 339,
+  "veg": "yes",
+  "spice": "Not spicy",
+  "tag": "Classic",
+  "description": "Thin crust with tomato sauce, mozzarella and basil.",
+  "tastes_like": "Simple, cheesy, safe for everyone.",
+  "ingredients": "Mozzarella, tomato, basil",
+  "emoji": "🍕",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pizza",
+  "item": "Pizza Ortolana",
+  "price": 369,
+  "veg": "yes",
+  "spice": "Mild",
+  "tag": "Veggie",
+  "description": "Vegetable pizza topped with seasonal veggies and cheese.",
+  "tastes_like": "Fresh and veggie-heavy.",
+  "ingredients": "Veggies, mozzarella, tomato",
+  "emoji": "🫑",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pizza",
+  "item": "Chef Special (Paneer)",
+  "price": 409,
+  "veg": "yes",
+  "spice": "Medium",
+  "tag": "Chef's pick",
+  "description": "Pizza loaded with paneer, peppers, onion and extra cheese.",
+  "tastes_like": "Rich and filling, good to share.",
+  "ingredients": "Paneer, peppers, onion, cheese",
+  "emoji": "🧈",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pizza",
+  "item": "Genovese Pesto",
+  "price": 369,
+  "veg": "yes",
+  "spice": "Mild",
+  "tag": "Herby",
+  "description": "Pizza with a basil pesto base instead of tomato sauce.",
+  "tastes_like": "Green, herby and nutty.",
+  "ingredients": "Basil pesto, mozzarella",
+  "emoji": "🌿",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pizza",
+  "item": "Cargado Mexican",
+  "price": 369,
+  "veg": "yes",
+  "spice": "Medium",
+  "tag": "Spicy",
+  "description": "Mexican-style pizza with jalapenos, beans and spiced toppings.",
+  "tastes_like": "Bold and spicy.",
+  "ingredients": "Jalapeno, beans, cheese, spices",
+  "emoji": "🌶",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pasta",
+  "item": "Arrabiata",
+  "price": 289,
+  "veg": "yes",
+  "spice": "Spicy",
+  "tag": "Spicy",
+  "description": "Penne in a fiery tomato sauce with garlic and chilli flakes.",
+  "tastes_like": "Tangy and hot, no cream.",
+  "ingredients": "Penne, tomato, garlic, chilli",
+  "emoji": "🍝",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pasta",
+  "item": "Pesto",
+  "price": 309,
+  "veg": "yes",
+  "spice": "Mild",
+  "tag": "Chef's pick",
+  "description": "Pasta tossed in a green sauce of basil, pine nuts, parmesan and olive oil.",
+  "tastes_like": "Herby and nutty, not creamy.",
+  "ingredients": "Basil, pine nuts, parmesan, olive oil",
+  "emoji": "🌿",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pasta",
+  "item": "Alfredo",
+  "price": 289,
+  "veg": "yes",
+  "spice": "Not spicy",
+  "tag": "Creamy",
+  "description": "Rich white sauce of cream, butter and cheese on penne.",
+  "tastes_like": "Smooth, cheesy, filling.",
+  "ingredients": "Cream, butter, cheese",
+  "emoji": "🧀",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pasta",
+  "item": "Mac n Cheese",
+  "price": 359,
+  "veg": "yes",
+  "spice": "Not spicy",
+  "tag": "Comfort food",
+  "description": "Baked macaroni in a thick, gooey cheese sauce.",
+  "tastes_like": "Cheesy and comforting.",
+  "ingredients": "Macaroni, cheese, cream",
+  "emoji": "🧀",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pasta",
+  "item": "Aglio e Olio",
+  "price": 309,
+  "veg": "yes",
+  "spice": "Medium",
+  "tag": "Light",
+  "description": "Italian classic: pasta in olive oil with garlic and chilli. No cream.",
+  "tastes_like": "Light and garlicky.",
+  "ingredients": "Olive oil, garlic, chilli",
+  "emoji": "🧄",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Pasta",
+  "item": "Pink Sauce Pasta",
+  "price": 309,
+  "veg": "yes",
+  "spice": "Mild",
+  "tag": "Fan favourite",
+  "description": "Half tomato, half cream: tangy and creamy together.",
+  "tastes_like": "Best of red and white.",
+  "ingredients": "Tomato, cream, cheese",
+  "emoji": "🍅",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Salads",
+  "item": "Greek Salad",
+  "price": 229,
+  "veg": "yes",
+  "spice": "Not spicy",
+  "tag": "Fresh",
+  "description": "Cucumber, tomato, olives and feta with a light dressing.",
+  "tastes_like": "Fresh, salty and crunchy.",
+  "ingredients": "Cucumber, tomato, olives, feta",
+  "emoji": "🥗",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Salads",
+  "item": "Waldorf Salad",
+  "price": 269,
+  "veg": "yes",
+  "spice": "Not spicy",
+  "tag": "Sweet and crunchy",
+  "description": "Apple, grapes and walnuts in a creamy dressing.",
+  "tastes_like": "Sweet, crunchy, creamy.",
+  "ingredients": "Apple, grapes, walnuts, dressing",
+  "emoji": "🍎",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Salads",
+  "item": "Caesar Salad",
+  "price": 229,
+  "veg": "yes",
+  "spice": "Not spicy",
+  "tag": "Classic",
+  "description": "Crisp lettuce with parmesan, croutons and Caesar dressing.",
+  "tastes_like": "Creamy and tangy.",
+  "ingredients": "Lettuce, parmesan, croutons",
+  "emoji": "🥬",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Iced Tea",
+  "item": "Peach Iced Tea",
+  "price": 189,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Cold",
+  "description": "Chilled black tea with sweet peach.",
+  "tastes_like": "Light and sweet.",
+  "ingredients": "Tea, peach",
+  "emoji": "🍑",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Iced Tea",
+  "item": "Lemon Iced Tea",
+  "price": 199,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Cold",
+  "description": "Chilled black tea with fresh lemon.",
+  "tastes_like": "Crisp and tangy.",
+  "ingredients": "Tea, lemon",
+  "emoji": "🍋",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Iced Tea",
+  "item": "Passion Fruit Iced Tea",
+  "price": 209,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Cold",
+  "description": "Chilled tea with tangy passion fruit.",
+  "tastes_like": "Tropical and tart.",
+  "ingredients": "Tea, passion fruit",
+  "emoji": "🍹",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mocktails",
+  "item": "Sex on the Beach",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Fruity",
+  "description": "Fruity mocktail with peach, orange and cranberry notes.",
+  "tastes_like": "Sweet and fruity.",
+  "ingredients": "Peach, orange, cranberry",
+  "emoji": "🍹",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mocktails",
+  "item": "Bitch Pe Beach",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Fruity",
+  "description": "Fruity house mocktail, served cold over ice.",
+  "tastes_like": "Sweet and refreshing.",
+  "ingredients": "Fruit juices, soda",
+  "emoji": "🍹",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mocktails",
+  "item": "Pina Colada",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Tropical",
+  "description": "Creamy pineapple and coconut mocktail.",
+  "tastes_like": "Sweet, creamy, tropical.",
+  "ingredients": "Pineapple, coconut",
+  "emoji": "🍍",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mocktails",
+  "item": "Happy Hell",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "House special",
+  "description": "House special mocktail, bright and tangy.",
+  "tastes_like": "Tangy with a kick.",
+  "ingredients": "Fruit, spices, soda",
+  "emoji": "🔥",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mocktails",
+  "item": "Berry Blend Mocktail",
+  "price": 219,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Fruity",
+  "description": "Mixed berries blended with soda.",
+  "tastes_like": "Sweet and tangy.",
+  "ingredients": "Mixed berries, soda",
+  "emoji": "🫐",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mocktails",
+  "item": "Mystery Mocktail",
+  "price": 219,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Surprise",
+  "description": "Berry and orange mocktail served with an orange wheel.",
+  "tastes_like": "Berry soda with a citrus kick.",
+  "ingredients": "Berries, orange, soda",
+  "emoji": "🍹",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mojitos",
+  "item": "Virgin Mojito",
+  "price": 229,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Refreshing",
+  "description": "Lime, mint and soda over crushed ice.",
+  "tastes_like": "Sharp and fizzy.",
+  "ingredients": "Lime, mint, soda",
+  "emoji": "🍃",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mojitos",
+  "item": "Watermelon Mojito",
+  "price": 239,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Refreshing",
+  "description": "Mojito with fresh watermelon.",
+  "tastes_like": "Sweet, minty and cooling.",
+  "ingredients": "Watermelon, mint, lime",
+  "emoji": "🍉",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mojitos",
+  "item": "Peach Mojito",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Refreshing",
+  "description": "Mojito with sweet peach.",
+  "tastes_like": "Fruity and minty.",
+  "ingredients": "Peach, mint, lime",
+  "emoji": "🍑",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mojitos",
+  "item": "Wild Mojito",
+  "price": 259,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Refreshing",
+  "description": "Mojito with mixed wild berries.",
+  "tastes_like": "Berry-sweet with mint.",
+  "ingredients": "Wild berries, mint, lime",
+  "emoji": "🫐",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mojitos",
+  "item": "Bloody Mojito",
+  "price": 209,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Refreshing",
+  "description": "Red mojito with a fruity twist.",
+  "tastes_like": "Sweet-tart and minty.",
+  "ingredients": "Red fruit, mint, lime",
+  "emoji": "🍓",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Mojitos",
+  "item": "Blue Mojito",
+  "price": 279,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Refreshing",
+  "description": "Blue curacao-flavoured mojito with mint and lime.",
+  "tastes_like": "Citrusy and sweet.",
+  "ingredients": "Blue curacao syrup, mint, lime",
+  "emoji": "🧊",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Frappes",
+  "item": "Strawberry Frappe",
+  "price": 239,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Cold and thick",
+  "description": "Blended strawberry frappe.",
+  "tastes_like": "Sweet and creamy.",
+  "ingredients": "Strawberry, milk, ice",
+  "emoji": "🍓",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Frappes",
+  "item": "Nutella Frappe",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Dessert drink",
+  "description": "Thick blended frappe with Nutella.",
+  "tastes_like": "Very sweet, chocolatey.",
+  "ingredients": "Nutella, milk, ice cream",
+  "emoji": "🍫",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Frappes",
+  "item": "Lotus Biscoff Frappe",
+  "price": 229,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Dessert drink",
+  "description": "Blended frappe with Biscoff cookies.",
+  "tastes_like": "Caramel-biscuit sweet.",
+  "ingredients": "Biscoff, milk, ice cream",
+  "emoji": "🍪",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Frappes",
+  "item": "Chococo Frappe",
+  "price": 239,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Dessert drink",
+  "description": "Rich chocolate frappe.",
+  "tastes_like": "Chocolatey and thick.",
+  "ingredients": "Chocolate, milk, ice cream",
+  "emoji": "🍫",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Frappes",
+  "item": "Vietnamese Iced Coffee",
+  "price": 259,
+  "veg": "yes",
+  "spice": "Cold",
+  "tag": "Coffee",
+  "description": "Strong coffee with sweet condensed milk over ice.",
+  "tastes_like": "Strong, sweet and bold.",
+  "ingredients": "Coffee, condensed milk, ice",
+  "emoji": "☕",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Chai & Cocoa",
+  "item": "Elaichi Chai",
+  "price": 99,
+  "veg": "yes",
+  "spice": "Hot",
+  "tag": "Hot",
+  "description": "Milk tea flavoured with cardamom.",
+  "tastes_like": "Warm and fragrant.",
+  "ingredients": "Tea, milk, cardamom",
+  "emoji": "🍵",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Chai & Cocoa",
+  "item": "Masala Chai",
+  "price": 99,
+  "veg": "yes",
+  "spice": "Hot",
+  "tag": "Hot",
+  "description": "Milk tea with warming Indian spices.",
+  "tastes_like": "Warm and spicy.",
+  "ingredients": "Tea, milk, spices",
+  "emoji": "🍵",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Chai & Cocoa",
+  "item": "Lemongrass Chai",
+  "price": 99,
+  "veg": "yes",
+  "spice": "Hot",
+  "tag": "Hot",
+  "description": "Milk tea with fresh lemongrass.",
+  "tastes_like": "Light and citrusy.",
+  "ingredients": "Tea, milk, lemongrass",
+  "emoji": "🍵",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Chai & Cocoa",
+  "item": "Hot Chocolate",
+  "price": 249,
+  "veg": "yes",
+  "spice": "Hot",
+  "tag": "Hot",
+  "description": "Thick, rich hot chocolate.",
+  "tastes_like": "Chocolatey and warming.",
+  "ingredients": "Chocolate, milk",
+  "emoji": "🍫",
+  "video": "",
+  "photo": "",
+  "available": true
+ },
+ {
+  "category": "Chai & Cocoa",
+  "item": "Nutella Hot Chocolate",
+  "price": 309,
+  "veg": "yes",
+  "spice": "Hot",
+  "tag": "Hot",
+  "description": "Hot chocolate made with Nutella.",
+  "tastes_like": "Very rich and sweet.",
+  "ingredients": "Nutella, chocolate, milk",
+  "emoji": "🍫",
+  "video": "",
+  "photo": "",
+  "available": true
+ }
+]
+};
+/* ================================================================ */
+
+var THEMES={
+ warm:{bg:"#faf3ea",card:"#ffffff",ink:"#3b2a20",mute:"#8a7566",acc:"#8a5a2b",line:"#eadccb",hero:"#f1dfc6",on:"#ffffff"},
+ fresh:{bg:"#f3f8f1",card:"#ffffff",ink:"#1f3326",mute:"#6b8272",acc:"#2e7d4f",line:"#d9e8dc",hero:"#dcefd9",on:"#ffffff"},
+ night:{bg:"#14161f",card:"#1e2130",ink:"#f2eee4",mute:"#a3a6b8",acc:"#e8b04a",line:"#2c3045",hero:"#262a3f",on:"#14161f"},
+ berry:{bg:"#fff4f6",card:"#ffffff",ink:"#4a1d2b",mute:"#9a6a77",acc:"#b3265a",line:"#f3d6df",hero:"#fbdbe5",on:"#ffffff"}
+};
+var items=[],cats=[],cur="";
+var F={veg:0,spicy:0,u250:0},cart={};
+function match(d){var q=document.getElementById("q").value.trim().toLowerCase();
+ if(q){var h=(d.item+" "+d.description+" "+d.ingredients+" "+d.category+" "+d.tag).toLowerCase();if(h.indexOf(q)<0)return false}else if(d.category!=cur)return false;
+ if(F.veg&&!/^y/i.test(d.veg))return false;
+ if(F.spicy&&!/^(spicy|medium)$/i.test(d.spice||""))return false;
+ if(F.u250&&!(d.price<=250))return false;
+ return true}
+function chips(){var c=document.getElementById("chips");[["veg","🟢 Veg"],["spicy","🌶 Spicy"],["u250","Under ₹250"]].forEach(function(x){var b=document.createElement("button");b.textContent=x[1];b.onclick=function(){F[x[0]]=F[x[0]]?0:1;b.className=F[x[0]]?"on":"";list()};c.appendChild(b)})}
+chips();document.getElementById("q").oninput=function(){list()};
+function save(){try{var o={};Object.keys(cart).forEach(function(k){o[k]=cart[k].q});localStorage.setItem("cart:"+CAFE.name,JSON.stringify(o))}catch(e){}}
+function restore(){try{var o=JSON.parse(localStorage.getItem("cart:"+CAFE.name)||"{}");items.forEach(function(d){if(o[d.item]&&d.available)cart[d.item]={d:d,q:o[d.item]}})}catch(e){}}
+function totals(){var n=0,t=0;Object.keys(cart).forEach(function(k){n+=cart[k].q;t+=cart[k].q*cart[k].d.price});return [n,t]}
+function bar(bump){var b=document.getElementById("cbar"),t=totals();document.body.classList.toggle("hascart",t[0]>0);b.className="cbar"+(t[0]?" show":"")+(bump?" bump":"");b.innerHTML="<span>🧾 My order · "+t[0]+(t[0]==1?" item":" items")+"</span><span>₹"+t[1]+" · View ›</span>"}
+function add(d){cart[d.item]=cart[d.item]||{d:d,q:0};cart[d.item].q++;save();bar(1)}
+function openCart(){var ks=Object.keys(cart),t=totals();if(!ks.length){shut();return}
+ var h='<div class="grab"></div><button class="x" onclick="shut()">✕</button><h2 style="margin:6px 0 4px;font:700 22px Georgia,serif">My order</h2>';
+ ks.forEach(function(k,i){var c=cart[k];h+='<div class="cr"><b>'+esc(k)+'</b><button onclick="chg('+i+',-1)">−</button><span>'+c.q+'</span><button onclick="chg('+i+',1)">+</button><span style="width:62px;text-align:right">₹'+c.q*c.d.price+'</span></div>'});
+ h+='<div class="tot"><span>Total</span><span>₹'+t[1]+'</span></div><p>Show this list to the waiter to place your order.</p><button class="clr" onclick="clr()">Clear order</button>';
+ document.getElementById("panel").innerHTML=h;document.getElementById("sheet").classList.add("show")}
+function chg(i,dl){var k=Object.keys(cart)[i];cart[k].q+=dl;if(cart[k].q<=0)delete cart[k];save();bar();openCart()}
+function clr(){cart={};save();bar();shut()}
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function csv(t){var r=[],row=[],f="",q=false;for(var i=0;i<t.length;i++){var c=t[i];
+ if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i++}else if(c=='"')q=false;else f+=c}
+ else if(c=='"')q=true;else if(c==","){row.push(f);f=""}
+ else if(c=="\n"||c=="\r"){if(c=="\r"&&t[i+1]=="\n")i++;row.push(f);f="";if(row.join("")!="")r.push(row);row=[]}else f+=c}
+ row.push(f);if(row.join("")!="")r.push(row);
+ var h=r.shift().map(function(x){return x.trim().toLowerCase()});
+ return r.map(function(a){var o={};h.forEach(function(k,i){o[k]=(a[i]||"").trim()});
+  o.price=Number(o.price);o.available=!/^(no|false|0|out)$/i.test(o.available||"yes");return o})}
+function start(){
+ document.getElementById("cname").textContent=CAFE.name;
+ document.getElementById("ctag").textContent=CAFE.tagline;
+ document.title=CAFE.name+" – Menu";
+ if(CAFE.reviewUrl){var ra=document.createElement("a");ra.className="review";ra.href=CAFE.reviewUrl;ra.target="_blank";ra.rel="noopener";ra.textContent="⭐ Enjoyed your visit? Rate us on Google";document.getElementById("list").after(ra)}
+ var T=THEMES[CAFE.theme]||THEMES.warm;Object.keys(T).forEach(function(k){document.documentElement.style.setProperty("--"+k,T[k])});
+ if(CAFE.sheetCsvUrl){
+  fetch(CAFE.sheetCsvUrl).then(function(r){return r.text()}).then(function(t){init(csv(t))})
+   .catch(function(){init(CAFE.items)});
+ }else init(CAFE.items);
+}
+function init(arr){items=arr;cats=[];items.forEach(function(d){if(cats.indexOf(d.category)<0)cats.push(d.category)});cur=cats[0];restore();nav();list();bar()}
+function nav(){var n=document.getElementById("nav");n.innerHTML="";cats.forEach(function(c){var b=document.createElement("button");b.textContent=c;b.className=c==cur?"on":"";b.onclick=function(){cur=c;document.getElementById("q").value="";nav();list()};n.appendChild(b)})}
+function list(){var l=document.getElementById("list");l.innerHTML="";
+ var k=0;items.forEach(function(d,i){if(!match(d))return;var e=document.createElement("div");e.className="item"+(d.available?"":" out");
+  var bg=d.photo?' style="background-image:url('+esc(d.photo)+')"':"";
+  e.innerHTML='<div class="th"'+bg+'>'+(d.photo?"":esc(d.emoji||"🍽"))+(d.video?"<i>▶</i>":"")+'</div><div><div class="nm">'+esc(d.item)+'</div><div class="ds">'+esc(d.available?d.tag:"Out of stock")+'</div></div><div class="pr">₹'+esc(d.price)+'</div>'+(d.available?'<button class="plus" aria-label="Add">+</button>':'');
+  e.style.setProperty("--i",k++);e.onclick=function(){show(d)};var pb=e.querySelector(".plus");if(pb)pb.onclick=function(ev){ev.stopPropagation();add(d)};l.appendChild(e)});if(!k)l.innerHTML='<p class="empty">No dishes found</p>'}
+function show(d){
+ var media=d.video?'<video src="'+esc(d.video)+'" poster="'+esc(d.photo)+'" muted loop playsinline autoplay onloadeddata="this.className=&quot;on&quot;"></video>':(d.photo?'<img src="'+esc(d.photo)+'" alt="">':esc(d.emoji||"🍽"));
+ document.getElementById("panel").innerHTML='<div class="grab"></div><button class="x" onclick="shut()">✕</button><div class="vid'+(d.video||d.photo?'':' emo')+'">'+media+'</div>'+
+ '<div class="row"><h2>'+esc(d.item)+'</h2><div class="pr">₹'+esc(d.price)+'</div></div>'+
+ '<div class="tags"><span>'+(/^y/i.test(d.veg)?"🟢 Veg":"🔴 Non-veg")+'</span>'+(d.spice?'<span>'+esc(d.spice)+'</span>':"")+(d.tag?'<span>'+esc(d.tag)+'</span>':"")+(d.available?"":"<span>Out of stock</span>")+'</div>'+
+ '<p>'+esc(d.description)+'</p>'+(d.tastes_like?'<p><b>Tastes like:</b> '+esc(d.tastes_like)+'</p>':"")+(d.ingredients?'<p><b>Ingredients:</b> '+esc(d.ingredients)+'</p>':"")+(d.available?'<button class="addbtn" id="ab">Add to my order · ₹'+esc(d.price)+'</button>':"");
+ var ab=document.getElementById("ab");if(ab)ab.onclick=function(){add(d);ab.textContent="Added ✓ (tap again to add more)"};
+ document.getElementById("sheet").classList.add("show")}
+function shut(){var s=document.getElementById("sheet");if(!s.classList.contains("show")||s.classList.contains("closing"))return;s.classList.add("closing");setTimeout(function(){s.classList.remove("show","closing");var v=document.querySelector("#panel video");if(v)v.pause()},220)}
+document.getElementById("sheet").onclick=function(e){if(e.target==this)shut()};
+var sy=0,dy=0,P=document.getElementById("panel");
+P.addEventListener("touchstart",function(e){sy=e.touches[0].clientY;dy=0},{passive:true});
+P.addEventListener("touchmove",function(e){dy=e.touches[0].clientY-sy;if(dy>0&&P.scrollTop<=0){P.style.transition="none";P.style.transform="translateY("+dy+"px)"}},{passive:true});
+P.addEventListener("touchend",function(){P.style.transition="";P.style.transform="";if(dy>110&&P.scrollTop<=0)shut();dy=0});
+start();
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+var dp=null,ib=document.createElement("button");ib.className="inst";ib.textContent="📲 Install app";document.body.appendChild(ib);
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e;ib.style.display="block"});
+ib.onclick=function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;ib.style.display="none"})};
+window.addEventListener("appinstalled",function(){ib.style.display="none"});
+</script>
+</body>
+</html>
